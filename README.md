@@ -1,2 +1,2 @@
 # PetStore_API_testing
-тестирование Api PetStore с учебной целью
+тестирование API PetStore с учебной целью
