@@ -5370,7 +5370,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n    \"id\": {{petID}},\r\n    \"category\": {\r\n        \"id\": 5678,\r\n        \"name\": \"\"\r\n    },\r\n    \"name\": \"some_name\",\r\n    \"photoUrls\": [\r\n        \"\"\r\n    ],\r\n    \"tags\": [\r\n        {\r\n            \"id\": 90,\r\n            \"name\": \"some_string\"\r\n        }\r\n    ],\r\n    \"status\": \"test_status\"\r\n}",
+									"raw": "{\r\n    \"id\": {{petID}},\r\n    \"category\": {\r\n        \"id\": 5678,\r\n        \"name\": \"\"\r\n    },\r\n    \"name\": \"some_name\",\r\n    \"photoUrls\": [\r\n        \r\n    ],\r\n    \"tags\": [\r\n        {\r\n            \"id\": 90,\r\n            \"name\": \"some_string\"\r\n        }\r\n    ],\r\n    \"status\": \"test_status\"\r\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -5956,8 +5956,16 @@
 											"    method: 'DELETE'\r",
 											"};\r",
 											"\r",
+											"let requestUrl2 = \"https://petstore.swagger.io/v2/pet/\" + pm.environment.get(\"petID\");\r",
+											"\r",
+											"const getRequest2 = {\r",
+											"    url: requestUrl2,\r",
+											"    method: 'DELETE'\r",
+											"};\r",
+											"\r",
 											"setTimeout(function(){\r",
 											"    pm.sendRequest(getRequest1, () => {});\r",
+											"    pm.sendRequest(getRequest2, () => {});\r",
 											"}, [100]);"
 										],
 										"type": "text/javascript"
@@ -7122,6 +7130,1662 @@
 									"path": [
 										"v2",
 										"pet"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Обновление информации о пете с неверными данными в запросе: с недопустимым ID пета",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"let stat = pm.response.code;\r",
+											"\r",
+											"if (stat == '400') {\r",
+											"    pm.test(`Статус код ${pm.response.code} ${pm.response.status}`, () =>{\r",
+											"    });\r",
+											"    pm.test(\"В теле ответа message: 'Invalid ID supplied'\", () => {\r",
+											"        pm.expect(pm.response.json().message).to.eql(\"Invalid ID supplied\");\r",
+											"});\r",
+											"} else {\r",
+											"    pm.test(`Статус код ${pm.response.code} ${pm.response.status}`, () =>{\r",
+											"        pm.expect.fail();\r",
+											"    });\r",
+											"};\r",
+											"\r",
+											"let requestUrl1 = \"https://petstore.swagger.io/v2/pet/petID\";\r",
+											"\r",
+											"const getRequest1 = {\r",
+											"    url: requestUrl1,\r",
+											"    method: 'DELETE'\r",
+											"};\r",
+											"\r",
+											"setTimeout(function(){\r",
+											"    pm.sendRequest(getRequest1, () => {});\r",
+											"}, [100]);"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"let requestUrl1 = \"https://petstore.swagger.io/v2/pet\";\r",
+											"\r",
+											"const getRequest1 = {\r",
+											"    url: requestUrl1,\r",
+											"    method: 'POST',\r",
+											"    header: {\r",
+											"    'Content-Type': 'application/json',\r",
+											"    'X-Foo': 'bar'\r",
+											"    },\r",
+											"    body: {\r",
+											"    mode: 'raw',\r",
+											"        raw: JSON.stringify({ \"id\": \"petID\", \"category\": {\"id\": 5678,\"name\": \"test_pet\"}, \"name\": \"some_name\", \"photoUrls\": [ \"some_image\" ], \"tags\": [{ \"id\": 90, \"name\": \"some_string\" }],\"status\": \"test_status\" })\r",
+											"        }\r",
+											"};\r",
+											"\r",
+											"pm.sendRequest(getRequest1, () => {});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"id\": \"petID\",\r\n    \"category\": {\r\n        \"id\": 5678,\r\n        \"name\": \"test_pet\"\r\n    },\r\n    \"name\": \"{{petName2}}\",\r\n    \"photoUrls\": [\r\n        \"some_image_2\"\r\n    ],\r\n    \"tags\": [\r\n        {\r\n            \"id\": 9012345,\r\n            \"name\": \"some_string_2\"\r\n        }\r\n    ],\r\n    \"status\": \"{{petStatus2}}\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://petstore.swagger.io/v2/pet",
+									"protocol": "https",
+									"host": [
+										"petstore",
+										"swagger",
+										"io"
+									],
+									"path": [
+										"v2",
+										"pet"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Обновление информации о пете с неверными данными в запросе: с ID пета недопустимого типа данных",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"let stat = pm.response.code;\r",
+											"\r",
+											"if (stat == '400') {\r",
+											"    pm.test(`Статус код ${pm.response.code} ${pm.response.status}`, () =>{\r",
+											"    });\r",
+											"    pm.test(\"В теле ответа message: 'Invalid ID supplied'\", () => {\r",
+											"        pm.expect(pm.response.json().message).to.eql(\"Invalid ID supplied\");\r",
+											"});\r",
+											"} else {\r",
+											"    pm.test(`Статус код ${pm.response.code} ${pm.response.status}`, () =>{\r",
+											"        pm.expect.fail();\r",
+											"    });\r",
+											"};\r",
+											"\r",
+											"let requestUrl1 = \"https://petstore.swagger.io/v2/pet/iIİı\";\r",
+											"\r",
+											"const getRequest1 = {\r",
+											"    url: requestUrl1,\r",
+											"    method: 'DELETE'\r",
+											"};\r",
+											"\r",
+											"setTimeout(function(){\r",
+											"    pm.sendRequest(getRequest1, () => {});\r",
+											"}, [100]);"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"let requestUrl1 = \"https://petstore.swagger.io/v2/pet\";\r",
+											"\r",
+											"const getRequest1 = {\r",
+											"    url: requestUrl1,\r",
+											"    method: 'POST',\r",
+											"    header: {\r",
+											"    'Content-Type': 'application/json',\r",
+											"    'X-Foo': 'bar'\r",
+											"    },\r",
+											"    body: {\r",
+											"    mode: 'raw',\r",
+											"        raw: JSON.stringify({ \"id\": \"iIİı\", \"category\": {\"id\": 5678,\"name\": \"test_pet\"}, \"name\": \"some_name\", \"photoUrls\": [ \"some_image\" ], \"tags\": [{ \"id\": 90, \"name\": \"some_string\" }],\"status\": \"test_status\" })\r",
+											"        }\r",
+											"};\r",
+											"\r",
+											"pm.sendRequest(getRequest1, () => {});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"id\": \"iIİı\",\r\n    \"category\": {\r\n        \"id\": 5678,\r\n        \"name\": \"test_pet\"\r\n    },\r\n    \"name\": \"{{petName2}}\",\r\n    \"photoUrls\": [\r\n        \"some_image_2\"\r\n    ],\r\n    \"tags\": [\r\n        {\r\n            \"id\": 9012345,\r\n            \"name\": \"some_string_2\"\r\n        }\r\n    ],\r\n    \"status\": \"{{petStatus2}}\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://petstore.swagger.io/v2/pet",
+									"protocol": "https",
+									"host": [
+										"petstore",
+										"swagger",
+										"io"
+									],
+									"path": [
+										"v2",
+										"pet"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Обновление информации о пете с неверными данными в запросе: с JSON, содержащим в себе два JSON с верной схемой",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"let stat = pm.response.code;\r",
+											"\r",
+											"if (stat == '405') {\r",
+											"    pm.test(`Статус код ${pm.response.code} ${pm.response.status}`, () =>{\r",
+											"    });\r",
+											"    pm.test(\"В теле ответа message: 'Validation exception'\", () => {\r",
+											"        pm.expect(pm.response.json().message).to.eql(\"Validation exception\");\r",
+											"});\r",
+											"} else {\r",
+											"    pm.test(`Статус код ${pm.response.code} ${pm.response.status}`, () =>{\r",
+											"        pm.expect.fail();\r",
+											"    });\r",
+											"};\r",
+											"\r",
+											"let requestUrl1 = \"https://petstore.swagger.io/v2/pet/\" + pm.environment.get(\"petID\");\r",
+											"\r",
+											"const getRequest1 = {\r",
+											"    url: requestUrl1,\r",
+											"    method: 'DELETE'\r",
+											"};\r",
+											"\r",
+											"setTimeout(function(){\r",
+											"    pm.sendRequest(getRequest1, () => {});\r",
+											"}, [100]);"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"let requestUrl1 = \"https://petstore.swagger.io/v2/pet\";\r",
+											"\r",
+											"const getRequest1 = {\r",
+											"    url: requestUrl1,\r",
+											"    method: 'POST',\r",
+											"    header: {\r",
+											"    'Content-Type': 'application/json',\r",
+											"    'X-Foo': 'bar'\r",
+											"    },\r",
+											"    body: {\r",
+											"    mode: 'raw',\r",
+											"        raw: JSON.stringify({ \"id\": pm.environment.get(\"petID\"), \"category\": {\"id\": 5678,\"name\": \"test_pet\"}, \"name\": \"some_name\", \"photoUrls\": [ \"some_image\" ], \"tags\": [{ \"id\": 90, \"name\": \"some_string\" }],\"status\": \"test_status\" })\r",
+											"        }\r",
+											"};\r",
+											"\r",
+											"pm.sendRequest(getRequest1, () => {});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "[\r\n    {\r\n    \"id\": {{petID}},\r\n    \"category\": {\r\n        \"id\": 5678,\r\n        \"name\": \"test_pet\"\r\n    },\r\n    \"name\": \"{{petName2}}\",\r\n    \"photoUrls\": [\r\n        \"some_image_2\"\r\n    ],\r\n    \"tags\": [\r\n        {\r\n            \"id\": 9012345,\r\n            \"name\": \"some_string_2\"\r\n        }\r\n    ],\r\n    \"status\": \"{{petStatus2}}\"\r\n    },\r\n    {    \"id\": {{petID}},\r\n    \"category\": {\r\n        \"id\": 5678,\r\n        \"name\": \"test_pet\"\r\n    },\r\n    \"name\": \"{{petName2}}\",\r\n    \"photoUrls\": [\r\n        \"some_image_2\"\r\n    ],\r\n    \"tags\": [\r\n        {\r\n            \"id\": 9012345,\r\n            \"name\": \"some_string_2\"\r\n        }\r\n    ],\r\n    \"status\": \"{{petStatus2}}\"\r\n    }\r\n]",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://petstore.swagger.io/v2/pet",
+									"protocol": "https",
+									"host": [
+										"petstore",
+										"swagger",
+										"io"
+									],
+									"path": [
+										"v2",
+										"pet"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Обновление информации о пете с неверными данными в запросе: с пустыми полями “name” и “photoUrls” в теле",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"let stat = pm.response.code;\r",
+											"\r",
+											"if (stat == '405') {\r",
+											"    pm.test(`Статус код ${pm.response.code} ${pm.response.status}`, () =>{\r",
+											"    });\r",
+											"    pm.test(\"В теле ответа message: 'Validation exception'\", () => {\r",
+											"        pm.expect(pm.response.json().message).to.eql(\"Validation exception\");\r",
+											"});\r",
+											"} else {\r",
+											"    pm.test(`Статус код ${pm.response.code} ${pm.response.status}`, () =>{\r",
+											"        pm.expect.fail();\r",
+											"    });\r",
+											"};\r",
+											"\r",
+											"let requestUrl1 = \"https://petstore.swagger.io/v2/pet/\" + pm.environment.get(\"petID\");\r",
+											"\r",
+											"const getRequest1 = {\r",
+											"    url: requestUrl1,\r",
+											"    method: 'DELETE'\r",
+											"};\r",
+											"\r",
+											"setTimeout(function(){\r",
+											"    pm.sendRequest(getRequest1, () => {});\r",
+											"}, [100]);"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"let requestUrl1 = \"https://petstore.swagger.io/v2/pet\";\r",
+											"\r",
+											"const getRequest1 = {\r",
+											"    url: requestUrl1,\r",
+											"    method: 'POST',\r",
+											"    header: {\r",
+											"    'Content-Type': 'application/json',\r",
+											"    'X-Foo': 'bar'\r",
+											"    },\r",
+											"    body: {\r",
+											"    mode: 'raw',\r",
+											"        raw: JSON.stringify({ \"id\": pm.environment.get(\"petID\"), \"category\": {\"id\": 5678,\"name\": \"test_pet\"}, \"name\": \"some_name\", \"photoUrls\": [ \"some_image\" ], \"tags\": [{ \"id\": 90, \"name\": \"some_string\" }],\"status\": \"test_status\" })\r",
+											"        }\r",
+											"};\r",
+											"\r",
+											"pm.sendRequest(getRequest1, () => {});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"id\": {{petID}},\r\n    \"category\": {\r\n        \"id\": 5678,\r\n        \"name\": \"\"\r\n    },\r\n    \"name\": \"some_name\",\r\n    \"photoUrls\": [\r\n        \r\n    ],\r\n    \"tags\": [\r\n        {\r\n            \"id\": 90,\r\n            \"name\": \"some_string\"\r\n        }\r\n    ],\r\n    \"status\": \"test_status\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://petstore.swagger.io/v2/pet",
+									"protocol": "https",
+									"host": [
+										"petstore",
+										"swagger",
+										"io"
+									],
+									"path": [
+										"v2",
+										"pet"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Обновление информации о пете с неверными данными в запросе: с данными недопустимого типа в полях “name” и “photoUrls”",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"let stat = pm.response.code;\r",
+											"\r",
+											"if (stat == '405') {\r",
+											"    pm.test(`Статус код ${pm.response.code} ${pm.response.status}`, () =>{\r",
+											"    });\r",
+											"    pm.test(\"В теле ответа message: 'Validation exception'\", () => {\r",
+											"        pm.expect(pm.response.json().message).to.eql(\"Validation exception\");\r",
+											"});\r",
+											"} else {\r",
+											"    pm.test(`Статус код ${pm.response.code} ${pm.response.status}`, () =>{\r",
+											"        pm.expect.fail();\r",
+											"    });\r",
+											"};\r",
+											"\r",
+											"let requestUrl1 = \"https://petstore.swagger.io/v2/pet/\" + pm.environment.get(\"petID\");\r",
+											"\r",
+											"const getRequest1 = {\r",
+											"    url: requestUrl1,\r",
+											"    method: 'DELETE'\r",
+											"};\r",
+											"\r",
+											"setTimeout(function(){\r",
+											"    pm.sendRequest(getRequest1, () => {});\r",
+											"}, [100]);"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"let requestUrl1 = \"https://petstore.swagger.io/v2/pet\";\r",
+											"\r",
+											"const getRequest1 = {\r",
+											"    url: requestUrl1,\r",
+											"    method: 'POST',\r",
+											"    header: {\r",
+											"    'Content-Type': 'application/json',\r",
+											"    'X-Foo': 'bar'\r",
+											"    },\r",
+											"    body: {\r",
+											"    mode: 'raw',\r",
+											"        raw: JSON.stringify({ \"id\": pm.environment.get(\"petID\"), \"category\": {\"id\": 5678,\"name\": \"test_pet\"}, \"name\": \"some_name\", \"photoUrls\": [ \"some_image\" ], \"tags\": [{ \"id\": 90, \"name\": \"some_string\" }],\"status\": \"test_status\" })\r",
+											"        }\r",
+											"};\r",
+											"\r",
+											"pm.sendRequest(getRequest1, () => {});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"id\": {{petID}},\r\n    \"category\": {\r\n        \"id\": 5678,\r\n        \"name\": \"test_pet\"\r\n    },\r\n    \"name\": 12345,\r\n    \"photoUrls\": [\r\n        67890\r\n    ],\r\n    \"tags\": [\r\n        {\r\n            \"id\": 90,\r\n            \"name\": \"some_string\"\r\n        }\r\n    ],\r\n    \"status\": \"test_status\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://petstore.swagger.io/v2/pet",
+									"protocol": "https",
+									"host": [
+										"petstore",
+										"swagger",
+										"io"
+									],
+									"path": [
+										"v2",
+										"pet"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Обновление информации о пете с неверными данными в запросе: без полей “name” и “photoUrls”",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"let stat = pm.response.code;\r",
+											"\r",
+											"if (stat == '405') {\r",
+											"    pm.test(`Статус код ${pm.response.code} ${pm.response.status}`, () =>{\r",
+											"    });\r",
+											"    pm.test(\"В теле ответа message: 'Validation exception'\", () => {\r",
+											"        pm.expect(pm.response.json().message).to.eql(\"Validation exception\");\r",
+											"});\r",
+											"} else {\r",
+											"    pm.test(`Статус код ${pm.response.code} ${pm.response.status}`, () =>{\r",
+											"        pm.expect.fail();\r",
+											"    });\r",
+											"};\r",
+											"\r",
+											"let requestUrl1 = \"https://petstore.swagger.io/v2/pet/\" + pm.environment.get(\"petID\");\r",
+											"\r",
+											"const getRequest1 = {\r",
+											"    url: requestUrl1,\r",
+											"    method: 'DELETE'\r",
+											"};\r",
+											"\r",
+											"setTimeout(function(){\r",
+											"    pm.sendRequest(getRequest1, () => {});\r",
+											"}, [100]);"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"let requestUrl1 = \"https://petstore.swagger.io/v2/pet\";\r",
+											"\r",
+											"const getRequest1 = {\r",
+											"    url: requestUrl1,\r",
+											"    method: 'POST',\r",
+											"    header: {\r",
+											"    'Content-Type': 'application/json',\r",
+											"    'X-Foo': 'bar'\r",
+											"    },\r",
+											"    body: {\r",
+											"    mode: 'raw',\r",
+											"        raw: JSON.stringify({ \"id\": pm.environment.get(\"petID\"), \"category\": {\"id\": 5678,\"name\": \"test_pet\"}, \"name\": \"some_name\", \"photoUrls\": [ \"some_image\" ], \"tags\": [{ \"id\": 90, \"name\": \"some_string\" }],\"status\": \"test_status\" })\r",
+											"        }\r",
+											"};\r",
+											"\r",
+											"pm.sendRequest(getRequest1, () => {});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"id\": {{petID}},\r\n    \"category\": {\r\n        \"id\": 5678,\r\n        \"name\": \"test_pet\"\r\n    },\r\n    \"tags\": [\r\n        {\r\n            \"id\": 90,\r\n            \"name\": \"some_string\"\r\n        }\r\n    ],\r\n    \"status\": \"test_status\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://petstore.swagger.io/v2/pet",
+									"protocol": "https",
+									"host": [
+										"petstore",
+										"swagger",
+										"io"
+									],
+									"path": [
+										"v2",
+										"pet"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Обновление информации о пете с неверными данными в запросе: с двумя полями “name”",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"let stat = pm.response.code;\r",
+											"\r",
+											"if (stat == '405') {\r",
+											"    pm.test(`Статус код ${pm.response.code} ${pm.response.status}`, () =>{\r",
+											"    });\r",
+											"    pm.test(\"В теле ответа message: 'Validation exception'\", () => {\r",
+											"        pm.expect(pm.response.json().message).to.eql(\"Validation exception\");\r",
+											"});\r",
+											"} else {\r",
+											"    pm.test(`Статус код ${pm.response.code} ${pm.response.status}`, () =>{\r",
+											"        pm.expect.fail();\r",
+											"    });\r",
+											"};\r",
+											"\r",
+											"let requestUrl1 = \"https://petstore.swagger.io/v2/pet/\" + pm.environment.get(\"petID\");\r",
+											"\r",
+											"const getRequest1 = {\r",
+											"    url: requestUrl1,\r",
+											"    method: 'DELETE'\r",
+											"};\r",
+											"\r",
+											"setTimeout(function(){\r",
+											"    pm.sendRequest(getRequest1, () => {});\r",
+											"}, [100]);"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"let requestUrl1 = \"https://petstore.swagger.io/v2/pet\";\r",
+											"\r",
+											"const getRequest1 = {\r",
+											"    url: requestUrl1,\r",
+											"    method: 'POST',\r",
+											"    header: {\r",
+											"    'Content-Type': 'application/json',\r",
+											"    'X-Foo': 'bar'\r",
+											"    },\r",
+											"    body: {\r",
+											"    mode: 'raw',\r",
+											"        raw: JSON.stringify({ \"id\": pm.environment.get(\"petID\"), \"category\": {\"id\": 5678,\"name\": \"test_pet\"}, \"name\": \"some_name\", \"photoUrls\": [ \"some_image\" ], \"tags\": [{ \"id\": 90, \"name\": \"some_string\" }],\"status\": \"test_status\" })\r",
+											"        }\r",
+											"};\r",
+											"\r",
+											"pm.sendRequest(getRequest1, () => {});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"id\": {{petID}},\r\n    \"category\": {\r\n        \"id\": 5678,\r\n        \"name\": \"test_pet\"\r\n    },\r\n    \"name\": \"some_name_1\",\r\n    \"name\": \"some_name_2\",\r\n    \"photoUrls\": [\r\n        \"some_image\"\r\n    ],\r\n    \"tags\": [\r\n        {\r\n            \"id\": 90,\r\n            \"name\": \"some_string\"\r\n        }\r\n    ],\r\n    \"status\": \"test_status\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://petstore.swagger.io/v2/pet",
+									"protocol": "https",
+									"host": [
+										"petstore",
+										"swagger",
+										"io"
+									],
+									"path": [
+										"v2",
+										"pet"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Обновление информации о пете с неверными данными в запросе: с JSON c неверной схемой",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"let stat = pm.response.code;\r",
+											"\r",
+											"if (stat == '405') {\r",
+											"    pm.test(`Статус код ${pm.response.code} ${pm.response.status}`, () =>{\r",
+											"    });\r",
+											"    pm.test(\"В теле ответа message: 'Validation exception'\", () => {\r",
+											"        pm.expect(pm.response.json().message).to.eql(\"Validation exception\");\r",
+											"});\r",
+											"} else {\r",
+											"    pm.test(`Статус код ${pm.response.code} ${pm.response.status}`, () =>{\r",
+											"        pm.expect.fail();\r",
+											"    });\r",
+											"};\r",
+											"\r",
+											"let requestUrl1 = \"https://petstore.swagger.io/v2/pet/\" + pm.environment.get(\"petID\");\r",
+											"\r",
+											"const getRequest1 = {\r",
+											"    url: requestUrl1,\r",
+											"    method: 'DELETE'\r",
+											"};\r",
+											"\r",
+											"setTimeout(function(){\r",
+											"    pm.sendRequest(getRequest1, () => {});\r",
+											"}, [100]);"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"let requestUrl1 = \"https://petstore.swagger.io/v2/pet\";\r",
+											"\r",
+											"const getRequest1 = {\r",
+											"    url: requestUrl1,\r",
+											"    method: 'POST',\r",
+											"    header: {\r",
+											"    'Content-Type': 'application/json',\r",
+											"    'X-Foo': 'bar'\r",
+											"    },\r",
+											"    body: {\r",
+											"    mode: 'raw',\r",
+											"        raw: JSON.stringify({ \"id\": pm.environment.get(\"petID\"), \"category\": {\"id\": 5678,\"name\": \"test_pet\"}, \"name\": \"some_name\", \"photoUrls\": [ \"some_image\" ], \"tags\": [{ \"id\": 90, \"name\": \"some_string\" }],\"status\": \"test_status\" })\r",
+											"        }\r",
+											"};\r",
+											"\r",
+											"pm.sendRequest(getRequest1, () => {});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"id\": {{petID}},\r\n    \"tags\": [\r\n        {\r\n            \"name\": \"some_string\",\r\n            \"id\": {{petID}},\r\n            \"category\": {\r\n        \"id\": 5678,\r\n        \"name\": \"test_pet\",\r\n        \"photoUrls\": [\r\n        \"some_image\"\r\n    ]\r\n    }\r\n        }\r\n    ],\r\n    \"status\": \"test_status\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://petstore.swagger.io/v2/pet",
+									"protocol": "https",
+									"host": [
+										"petstore",
+										"swagger",
+										"io"
+									],
+									"path": [
+										"v2",
+										"pet"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Обновление информации о пете с неверными данными в запросе: с пустым JSON",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"let stat = pm.response.code;\r",
+											"\r",
+											"if (stat == '405') {\r",
+											"    pm.test(`Статус код ${pm.response.code} ${pm.response.status}`, () =>{\r",
+											"    });\r",
+											"    pm.test(\"В теле ответа message: 'Validation exception'\", () => {\r",
+											"        pm.expect(pm.response.json().message).to.eql(\"Validation exception\");\r",
+											"});\r",
+											"} else {\r",
+											"    pm.test(`Статус код ${pm.response.code} ${pm.response.status}`, () =>{\r",
+											"        pm.expect.fail();\r",
+											"    });\r",
+											"};\r",
+											"\r",
+											"if (stat == '200') {\r",
+											"let requestUrl1 = \"https://petstore.swagger.io/v2/pet/\" + pm.response.json().id;\r",
+											"\r",
+											"const getRequest1 = {\r",
+											"    url: requestUrl1,\r",
+											"    method: 'DELETE'\r",
+											"};\r",
+											"\r",
+											"setTimeout(function(){\r",
+											"    pm.sendRequest(getRequest1, () => {});\r",
+											"}, [100]);\r",
+											"};"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{ }",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://petstore.swagger.io/v2/pet",
+									"protocol": "https",
+									"host": [
+										"petstore",
+										"swagger",
+										"io"
+									],
+									"path": [
+										"v2",
+										"pet"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Обновление информации о пете с неверными данными в запросе: с пустым телом запроса",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"let stat = pm.response.code;\r",
+											"\r",
+											"if (stat == '405') {\r",
+											"    pm.test(`Статус код ${pm.response.code} ${pm.response.status}`, () =>{\r",
+											"    });\r",
+											"    pm.test(\"В теле ответа message: 'Validation exception'\", () => {\r",
+											"        pm.expect(pm.response.json().message).to.eql(\"Validation exception\");\r",
+											"});\r",
+											"} else {\r",
+											"    pm.test(`Статус код ${pm.response.code} ${pm.response.status}`, () =>{\r",
+											"        pm.expect.fail();\r",
+											"    });\r",
+											"};\r",
+											"\r",
+											"if (stat == '200') {\r",
+											"let requestUrl1 = \"https://petstore.swagger.io/v2/pet/\" + pm.response.json().id;\r",
+											"\r",
+											"const getRequest1 = {\r",
+											"    url: requestUrl1,\r",
+											"    method: 'DELETE'\r",
+											"};\r",
+											"\r",
+											"setTimeout(function(){\r",
+											"    pm.sendRequest(getRequest1, () => {});\r",
+											"}, [100]);\r",
+											"};"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"url": {
+									"raw": "https://petstore.swagger.io/v2/pet",
+									"protocol": "https",
+									"host": [
+										"petstore",
+										"swagger",
+										"io"
+									],
+									"path": [
+										"v2",
+										"pet"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Обновление информации о пете с неверными данными в запросе: с недопустимым типом данных в теле",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"let stat = pm.response.code;\r",
+											"\r",
+											"if (stat == '405') {\r",
+											"    pm.test(`Статус код ${pm.response.code} ${pm.response.status}`, () =>{\r",
+											"    });\r",
+											"    pm.test(\"В теле ответа message: 'Validation exception'\", () => {\r",
+											"        pm.expect(pm.response.json().message).to.eql(\"Validation exception\");\r",
+											"});\r",
+											"} else {\r",
+											"    pm.test(`Статус код ${pm.response.code} ${pm.response.status}`, () =>{\r",
+											"        pm.expect.fail();\r",
+											"    });\r",
+											"};\r",
+											"\r",
+											"if (stat == '200') {\r",
+											"let requestUrl1 = \"https://petstore.swagger.io/v2/pet/\" + pm.response.json().id;\r",
+											"\r",
+											"const getRequest1 = {\r",
+											"    url: requestUrl1,\r",
+											"    method: 'DELETE'\r",
+											"};\r",
+											"\r",
+											"setTimeout(function(){\r",
+											"    pm.sendRequest(getRequest1, () => {});\r",
+											"}, [100]);\r",
+											"};"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"id\": {{petID}},\r\n    \"category\": {\r\n        \"id\": 5678,\r\n        \"name\": \"test_pet\"\r\n    },\r\n    \"name\": \"some_name\",\r\n    \"photoUrls\": [\r\n        \"some_image\"\r\n    ],\r\n    \"tags\": [\r\n        {\r\n            \"id\": 90,\r\n            \"name\": \"some_string\"\r\n        }\r\n    ],\r\n    \"status\": \"test_status\"\r\n}"
+								},
+								"url": {
+									"raw": "https://petstore.swagger.io/v2/pet",
+									"protocol": "https",
+									"host": [
+										"petstore",
+										"swagger",
+										"io"
+									],
+									"path": [
+										"v2",
+										"pet"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Получение информации о пете с фильтрацией по статусу с неверными данными в запросе",
+					"item": [
+						{
+							"name": "Получение информации о пете с фильтрацией по статусу с неверными данными в запросе: без статуса",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"let stat = pm.response.code;\r",
+											"\r",
+											"if (stat == '400') {\r",
+											"    pm.test(`Статус код ${pm.response.code} ${pm.response.status}`, () =>{\r",
+											"    });\r",
+											"    pm.test(\"В теле ответа message: 'Invalid status value'\", () => {\r",
+											"        pm.expect(pm.response.json().message).to.eql(\"Invalid status value\");\r",
+											"});\r",
+											"} else {\r",
+											"    pm.test(`Статус код ${pm.response.code} ${pm.response.status}`, () =>{\r",
+											"        pm.expect.fail();\r",
+											"    });\r",
+											"};"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://petstore.swagger.io/v2/pet/findByStatus",
+									"protocol": "https",
+									"host": [
+										"petstore",
+										"swagger",
+										"io"
+									],
+									"path": [
+										"v2",
+										"pet",
+										"findByStatus"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Получение информации о пете с фильтрацией по статусу с неверными данными в запросе: с пустым статусом в параметрах запроса",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"let stat = pm.response.code;\r",
+											"\r",
+											"if (stat == '400') {\r",
+											"    pm.test(`Статус код ${pm.response.code} ${pm.response.status}`, () =>{\r",
+											"    });\r",
+											"    pm.test(\"В теле ответа message: 'Invalid status value'\", () => {\r",
+											"        pm.expect(pm.response.json().message).to.eql(\"Invalid status value\");\r",
+											"});\r",
+											"} else {\r",
+											"    pm.test(`Статус код ${pm.response.code} ${pm.response.status}`, () =>{\r",
+											"        pm.expect.fail();\r",
+											"    });\r",
+											"};"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://petstore.swagger.io/v2/pet/findByStatus?status",
+									"protocol": "https",
+									"host": [
+										"petstore",
+										"swagger",
+										"io"
+									],
+									"path": [
+										"v2",
+										"pet",
+										"findByStatus"
+									],
+									"query": [
+										{
+											"key": "status",
+											"value": null
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Получение информации о пете с фильтрацией по статусу с неверными данными в запросе: со статусом длиной более 2000 символов в параметрах запроса",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"let stat = pm.response.code;\r",
+											"\r",
+											"if (stat == '400') {\r",
+											"    pm.test(`Статус код ${pm.response.code} ${pm.response.status}`, () =>{\r",
+											"    });\r",
+											"    pm.test(\"В теле ответа message: 'Invalid status value'\", () => {\r",
+											"        pm.expect(pm.response.json().message).to.eql(\"Invalid status value\");\r",
+											"});\r",
+											"} else {\r",
+											"    pm.test(`Статус код ${pm.response.code} ${pm.response.status}`, () =>{\r",
+											"        pm.expect.fail();\r",
+											"    });\r",
+											"};"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://petstore.swagger.io/v2/pet/findByStatus?status=856274187716501214380169368335095238564187339625407320197275803295910233850305123768664275328837963622374519291450390590583226483794140364024255194223715494396019961529133008883605490700179843826896508796250486971310280830920434948427517102768464385284003802649627092832749091906418818734409199037878650650481202586728384244608586782401220670484819316714578483573470913894879751743593037597174700958043105390517126785573735523552939240457793877534824291032967636545213496442358775782872313782965047462173296281679692478630647437235501692817157340205626343699650773556160626509065626669664769061991674461911184693346073793439233309402656533376182324524133878706650336626976931880435149154532010223737441814235830620407791198713737058807257098854640987700701697546204979394421386456582697652840710274692911019287690963778216603698256453578166035644598502111131742341992250065662819497558983827494986722091934899520057703459135274173777579838668809922707743816967541415965543245910880425028620516785427314091207197286754023404137800281502143393095076474213834048113060094590348352748702134495959460345676995068281897757558222440564814681584871173930239520896539814285878103243901826449836796933418729164959582053266619317734824456983995936024455881440280645833988274513819315437454983302710257262277685530251438818836740827103556329936081709026043121024106486006050972082948630889777722794339774068050557434529695494406922436837125732028208588681266247813966188247136675301556514773983999614623805779692591078937951981507231898564352166021523395113140994181200199350717894968864864722721918511655170944915046180801461734798005217468783753511294072972090688957350817292674047178544520086456263132443428813419032201935511293640403158576116833425540322844648701180599890621618499932249320343454959635023573033049705080213591287712226513850538625887319782288351550553559244365952045869850055145325631670696761021942644701219071203239118667286482132470832916581495735608774023925330851548257425526041401268610",
+									"protocol": "https",
+									"host": [
+										"petstore",
+										"swagger",
+										"io"
+									],
+									"path": [
+										"v2",
+										"pet",
+										"findByStatus"
+									],
+									"query": [
+										{
+											"key": "status",
+											"value": "856274187716501214380169368335095238564187339625407320197275803295910233850305123768664275328837963622374519291450390590583226483794140364024255194223715494396019961529133008883605490700179843826896508796250486971310280830920434948427517102768464385284003802649627092832749091906418818734409199037878650650481202586728384244608586782401220670484819316714578483573470913894879751743593037597174700958043105390517126785573735523552939240457793877534824291032967636545213496442358775782872313782965047462173296281679692478630647437235501692817157340205626343699650773556160626509065626669664769061991674461911184693346073793439233309402656533376182324524133878706650336626976931880435149154532010223737441814235830620407791198713737058807257098854640987700701697546204979394421386456582697652840710274692911019287690963778216603698256453578166035644598502111131742341992250065662819497558983827494986722091934899520057703459135274173777579838668809922707743816967541415965543245910880425028620516785427314091207197286754023404137800281502143393095076474213834048113060094590348352748702134495959460345676995068281897757558222440564814681584871173930239520896539814285878103243901826449836796933418729164959582053266619317734824456983995936024455881440280645833988274513819315437454983302710257262277685530251438818836740827103556329936081709026043121024106486006050972082948630889777722794339774068050557434529695494406922436837125732028208588681266247813966188247136675301556514773983999614623805779692591078937951981507231898564352166021523395113140994181200199350717894968864864722721918511655170944915046180801461734798005217468783753511294072972090688957350817292674047178544520086456263132443428813419032201935511293640403158576116833425540322844648701180599890621618499932249320343454959635023573033049705080213591287712226513850538625887319782288351550553559244365952045869850055145325631670696761021942644701219071203239118667286482132470832916581495735608774023925330851548257425526041401268610"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Получение информации о пете с фильтрацией по статусу с неверными данными в запросе: со статусом недопустимого типа данных",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"let stat = pm.response.code;\r",
+											"\r",
+											"if (stat == '400') {\r",
+											"    pm.test(`Статус код ${pm.response.code} ${pm.response.status}`, () =>{\r",
+											"    });\r",
+											"    pm.test(\"В теле ответа message: 'Invalid status value'\", () => {\r",
+											"        pm.expect(pm.response.json().message).to.eql(\"Invalid status value\");\r",
+											"});\r",
+											"} else {\r",
+											"    pm.test(`Статус код ${pm.response.code} ${pm.response.status}`, () =>{\r",
+											"        pm.expect.fail();\r",
+											"    });\r",
+											"};"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://petstore.swagger.io/v2/pet/findByStatus?status=iIİı",
+									"protocol": "https",
+									"host": [
+										"petstore",
+										"swagger",
+										"io"
+									],
+									"path": [
+										"v2",
+										"pet",
+										"findByStatus"
+									],
+									"query": [
+										{
+											"key": "status",
+											"value": "iIİı"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Получение информации о пете с фильтрацией по статусу с неверными данными в запросе: с несуществующим статусом",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"let stat = pm.response.code;\r",
+											"\r",
+											"if (stat == '400') {\r",
+											"    pm.test(`Статус код ${pm.response.code} ${pm.response.status}`, () =>{\r",
+											"    });\r",
+											"    pm.test(\"В теле ответа message: 'Invalid status value'\", () => {\r",
+											"        pm.expect(pm.response.json().message).to.eql(\"Invalid status value\");\r",
+											"});\r",
+											"} else {\r",
+											"    pm.test(`Статус код ${pm.response.code} ${pm.response.status}`, () =>{\r",
+											"        pm.expect.fail();\r",
+											"    });\r",
+											"};"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://petstore.swagger.io/v2/pet/findByStatus?status=thisStatusDoesNotExistNevermore",
+									"protocol": "https",
+									"host": [
+										"petstore",
+										"swagger",
+										"io"
+									],
+									"path": [
+										"v2",
+										"pet",
+										"findByStatus"
+									],
+									"query": [
+										{
+											"key": "status",
+											"value": "thisStatusDoesNotExistNevermore"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Добавление изображения пета с неверными данными в запросе",
+					"item": [
+						{
+							"name": "Добавление изображения пета с неверными данными в запросе: с несуществующим ID пета",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"let requestUrl1 = \"https://petstore.swagger.io/v2/pet/\" + pm.environment.get(\"petID\");\r",
+											"\r",
+											"const getRequest1 = {\r",
+											"    url: requestUrl1,\r",
+											"    method: 'DELETE'\r",
+											"};\r",
+											"\r",
+											"pm.sendRequest(getRequest1, () => {});"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"let stat = pm.response.code;\r",
+											"\r",
+											"if (stat != '200') {\r",
+											"    pm.test(`Статус код ${pm.response.code} ${pm.response.status}`, () =>{\r",
+											"    });\r",
+											"} else {\r",
+											"    pm.test(`Статус код ${pm.response.code} ${pm.response.status}`, () =>{\r",
+											"        pm.expect.fail();\r",
+											"    });\r",
+											"};\r",
+											"\r",
+											"if (stat == '200') {\r",
+											"let requestUrl1 = \"https://petstore.swagger.io/v2/pet/\" + pm.environment.get(\"petID\");\r",
+											"\r",
+											"const getRequest1 = {\r",
+											"    url: requestUrl1,\r",
+											"    method: 'DELETE'\r",
+											"};\r",
+											"\r",
+											"setTimeout(function(){\r",
+											"    pm.sendRequest(getRequest1, () => {});\r",
+											"}, [100]);\r",
+											"};"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "file",
+											"type": "file",
+											"src": "image1.png"
+										},
+										{
+											"key": "additionalMetadata",
+											"value": "someData",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "https://petstore.swagger.io/v2/pet/{{petID}}/uploadImage",
+									"protocol": "https",
+									"host": [
+										"petstore",
+										"swagger",
+										"io"
+									],
+									"path": [
+										"v2",
+										"pet",
+										"{{petID}}",
+										"uploadImage"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Добавление изображения пета с неверными данными в запросе: с ID пета недопустимого типа данных",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"let requestUrl1 = \"https://petstore.swagger.io/v2/pet\";\r",
+											"\r",
+											"const getRequest1 = {\r",
+											"    url: requestUrl1,\r",
+											"    method: 'POST',\r",
+											"    header: {\r",
+											"    'Content-Type': 'application/json',\r",
+											"    'X-Foo': 'bar'\r",
+											"    },\r",
+											"    body: {\r",
+											"    mode: 'raw',\r",
+											"        raw: JSON.stringify({ \"id\": \"iIİı\", \"category\": {\"id\": 5678,\"name\": \"test_pet\"}, \"name\": \"some_name\", \"photoUrls\": [ \"some_image\" ], \"tags\": [{ \"id\": 90, \"name\": \"some_string\" }],\"status\": \"test_status\" })\r",
+											"        }\r",
+											"};\r",
+											"\r",
+											"pm.sendRequest(getRequest1, () => {});"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"let stat = pm.response.code;\r",
+											"\r",
+											"if (stat != '200') {\r",
+											"    pm.test(`Статус код ${pm.response.code} ${pm.response.status}`, () =>{\r",
+											"    });\r",
+											"} else {\r",
+											"    pm.test(`Статус код ${pm.response.code} ${pm.response.status}`, () =>{\r",
+											"        pm.expect.fail();\r",
+											"    });\r",
+											"};\r",
+											"\r",
+											"let requestUrl1 = \"https://petstore.swagger.io/v2/pet/iIİı\";\r",
+											"\r",
+											"const getRequest1 = {\r",
+											"    url: requestUrl1,\r",
+											"    method: 'DELETE'\r",
+											"};\r",
+											"\r",
+											"setTimeout(function(){\r",
+											"    pm.sendRequest(getRequest1, () => {});\r",
+											"}, [100]);"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "file",
+											"type": "file",
+											"src": "image1.png"
+										},
+										{
+											"key": "additionalMetadata",
+											"value": "some_test_metaData",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "https://petstore.swagger.io/v2/pet/iIİı/uploadImage",
+									"protocol": "https",
+									"host": [
+										"petstore",
+										"swagger",
+										"io"
+									],
+									"path": [
+										"v2",
+										"pet",
+										"iIİı",
+										"uploadImage"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Добавление изображения пета с неверными данными в запросе: без ID пета",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"let stat = pm.response.code;\r",
+											"\r",
+											"if (stat != '200') {\r",
+											"    pm.test(`Статус код ${pm.response.code} ${pm.response.status}`, () =>{\r",
+											"    });\r",
+											"} else {\r",
+											"    pm.test(`Статус код ${pm.response.code} ${pm.response.status}`, () =>{\r",
+											"        pm.expect.fail();\r",
+											"    });\r",
+											"};"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "file",
+											"type": "file",
+											"src": "image1.png"
+										},
+										{
+											"key": "additionalMetadata",
+											"value": "some_test_metaData",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "https://petstore.swagger.io/v2/pet//uploadImage",
+									"protocol": "https",
+									"host": [
+										"petstore",
+										"swagger",
+										"io"
+									],
+									"path": [
+										"v2",
+										"pet",
+										"",
+										"uploadImage"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Добавление изображения пета с неверными данными в запросе: с пустым телом запроса",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"let requestUrl1 = \"https://petstore.swagger.io/v2/pet\";\r",
+											"\r",
+											"const getRequest1 = {\r",
+											"    url: requestUrl1,\r",
+											"    method: 'POST',\r",
+											"    header: {\r",
+											"    'Content-Type': 'application/json',\r",
+											"    'X-Foo': 'bar'\r",
+											"    },\r",
+											"    body: {\r",
+											"    mode: 'raw',\r",
+											"        raw: JSON.stringify({ \"id\": pm.environment.get(\"petID\"), \"category\": {\"id\": 5678,\"name\": \"test_pet\"}, \"name\": \"some_name\", \"photoUrls\": [ \"some_image\" ], \"tags\": [{ \"id\": 90, \"name\": \"some_string\" }],\"status\": \"test_status\" })\r",
+											"        }\r",
+											"};\r",
+											"\r",
+											"pm.sendRequest(getRequest1, () => {});"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"let stat = pm.response.code;\r",
+											"\r",
+											"if (stat != '200') {\r",
+											"    pm.test(`Статус код ${pm.response.code} ${pm.response.status}`, () =>{\r",
+											"    });\r",
+											"} else {\r",
+											"    pm.test(`Статус код ${pm.response.code} ${pm.response.status}`, () =>{\r",
+											"        pm.expect.fail();\r",
+											"    });\r",
+											"};\r",
+											"\r",
+											"let requestUrl1 = \"https://petstore.swagger.io/v2/pet/\" + pm.environment.get(\"petID\");\r",
+											"\r",
+											"const getRequest1 = {\r",
+											"    url: requestUrl1,\r",
+											"    method: 'DELETE'\r",
+											"};\r",
+											"\r",
+											"setTimeout(function(){\r",
+											"    pm.sendRequest(getRequest1, () => {});\r",
+											"}, [100]);"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": []
+								},
+								"url": {
+									"raw": "https://petstore.swagger.io/v2/pet/{{petID}}/uploadImage",
+									"protocol": "https",
+									"host": [
+										"petstore",
+										"swagger",
+										"io"
+									],
+									"path": [
+										"v2",
+										"pet",
+										"{{petID}}",
+										"uploadImage"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Добавление изображения пета с неверными данными в запросе: с данными недопустимого типа в теле запроса",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"let requestUrl1 = \"https://petstore.swagger.io/v2/pet\";\r",
+											"\r",
+											"const getRequest1 = {\r",
+											"    url: requestUrl1,\r",
+											"    method: 'POST',\r",
+											"    header: {\r",
+											"    'Content-Type': 'application/json',\r",
+											"    'X-Foo': 'bar'\r",
+											"    },\r",
+											"    body: {\r",
+											"    mode: 'raw',\r",
+											"        raw: JSON.stringify({ \"id\": pm.environment.get(\"petID\"), \"category\": {\"id\": 5678,\"name\": \"test_pet\"}, \"name\": \"some_name\", \"photoUrls\": [ \"some_image\" ], \"tags\": [{ \"id\": 90, \"name\": \"some_string\" }],\"status\": \"test_status\" })\r",
+											"        }\r",
+											"};\r",
+											"\r",
+											"pm.sendRequest(getRequest1, () => {});"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"let stat = pm.response.code;\r",
+											"\r",
+											"if (stat != '200') {\r",
+											"    pm.test(`Статус код ${pm.response.code} ${pm.response.status}`, () =>{\r",
+											"    });\r",
+											"} else {\r",
+											"    pm.test(`Статус код ${pm.response.code} ${pm.response.status}`, () =>{\r",
+											"        pm.expect.fail();\r",
+											"    });\r",
+											"};\r",
+											"\r",
+											"let requestUrl1 = \"https://petstore.swagger.io/v2/pet/\" + pm.environment.get(\"petID\");\r",
+											"\r",
+											"const getRequest1 = {\r",
+											"    url: requestUrl1,\r",
+											"    method: 'DELETE'\r",
+											"};\r",
+											"\r",
+											"setTimeout(function(){\r",
+											"    pm.sendRequest(getRequest1, () => {});\r",
+											"}, [100]);"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"id\": {{petID}},\r\n    \"category\": {\r\n        \"id\": 5678,\r\n        \"name\": \"test_pet\"\r\n    },\r\n    \"name\": \"some_name\",\r\n    \"photoUrls\": [\r\n        \"some_image\"\r\n    ],\r\n    \"tags\": [\r\n        {\r\n            \"id\": 90,\r\n            \"name\": \"some_string\"\r\n        }\r\n    ],\r\n    \"status\": \"test_status\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://petstore.swagger.io/v2/pet/{{petID}}/uploadImage",
+									"protocol": "https",
+									"host": [
+										"petstore",
+										"swagger",
+										"io"
+									],
+									"path": [
+										"v2",
+										"pet",
+										"{{petID}}",
+										"uploadImage"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Удаление пета с неверными данными в запросе",
+					"item": [
+						{
+							"name": "Удаление пета с неверными данными в запросе: с несуществующим ID",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"let requestUrl1 = \"https://petstore.swagger.io/v2/pet/\" + pm.environment.get(\"petID\");\r",
+											"\r",
+											"const getRequest1 = {\r",
+											"    url: requestUrl1,\r",
+											"    method: 'DELETE'\r",
+											"};\r",
+											"\r",
+											"pm.sendRequest(getRequest1, () => {});"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"let stat = pm.response.code;\r",
+											"\r",
+											"if (stat == '404') {\r",
+											"    pm.test(`Статус код ${pm.response.code} ${pm.response.status}`, () =>{\r",
+											"    });\r",
+											"    pm.test(\"В теле ответа message: 'Pet not found'\", () => {\r",
+											"        pm.expect(pm.response.json().message).to.eql(\"Pet not found\");\r",
+											"});\r",
+											"} else {\r",
+											"    pm.test(`Статус код ${pm.response.code} ${pm.response.status}`, () =>{\r",
+											"        pm.expect.fail();\r",
+											"    });\r",
+											"};"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "https://petstore.swagger.io/v2/pet/{{petID}}",
+									"protocol": "https",
+									"host": [
+										"petstore",
+										"swagger",
+										"io"
+									],
+									"path": [
+										"v2",
+										"pet",
+										"{{petID}}"
 									]
 								}
 							},
